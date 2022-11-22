@@ -1,0 +1,113 @@
+package com.trybe.acc.java.controledeacesso;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Principal {
+
+  /**
+   * Método principal.
+   */
+  public static void main(String[] args) {
+    // ESCREVA SEU CÓDIGO AQUI
+    Scanner scan = new Scanner(System.in);
+
+    ArrayList<Short> idades = new ArrayList<Short>();
+
+    boolean acesso = true;
+    short idade;
+    short opcao;
+
+    mostrarMenu();
+    opcao = scan.nextShort();
+    while (acesso) {
+
+      if (opcao != 1 && opcao != 2) {
+        System.out.println("Entre com uma opção válida!");
+        mostrarMenu();
+        opcao = scan.nextShort();
+      } else if (opcao == 1) {
+        System.out.println("Entre com a idade:");
+        idade = scan.nextShort();
+        message(idade);
+
+        idades.add(idade);
+        mostrarMenu();
+        opcao = scan.nextShort();
+
+      } else {
+        relatorio(idades);
+        acesso = false;
+      }
+    }
+
+    scan.close();
+  }
+
+  /**
+   * Metodo que imprime menu no terminal.
+   */
+
+  static void mostrarMenu() {
+    System.out.println("Entre com o número correspondente à opção desejada:\n"
+        + "1 - Acessar o estabelecimento\n"
+        + "2 - Finalizar sistema e mostrar relatório");
+  }
+
+  /**
+   * Metodo que mostra frases para cada idade.
+   * 
+   * @param idade - idade
+   */
+
+  static void message(short idade) {
+
+    if (idade < 18) {
+      System.out.println("Pessoa cliente menor de idade, catraca liberada!");
+    } else if (idade >= 18 && idade <= 50) {
+      System.out.println("Pessoa adulta, catraca liberada!");
+    } else {
+      System.out.println("Pessoa adulta maior de 50, catraca liberada!");
+    }
+
+  }
+
+  /**
+   * Metodo para gerir as idades e relatorio.
+   * 
+   * @params idade - idades
+   */
+
+  static void relatorio(ArrayList<Short> idades) {
+    int menorQue18 = 0;
+    int entre18e50 = 0;
+    int maiorQue50 = 0;
+
+    for (short idade : idades) {
+      if (idade < 18) {
+        menorQue18 += 1;
+      } else if (idade > 18 && idade <= 50) {
+        entre18e50 += 1;
+      } else {
+        maiorQue50 += 1;
+      }
+    }
+
+    float idadesSize = menorQue18 + entre18e50 + maiorQue50;
+    DecimalFormat decimal = new DecimalFormat("#0.0#%");
+
+    String percentualMenorQue = decimal.format((menorQue18 / idadesSize) * 1).replace(',', '.');
+    String percentualEntre = decimal.format((entre18e50 / idadesSize) * 1).replace(',', '.');
+    String percentualMaiorQue = decimal.format((maiorQue50 / idadesSize) * 1).replace(',', '.');
+
+    int idadesSizeTotal = Math.round(idadesSize);
+
+    String relatorioFinal = "---- Quantidade ----\n" + "menores: " + menorQue18 + "\n" + "adultas: "
+        + entre18e50 + "\n" + "maiores que 50: " + maiorQue50 + "\n" + "\n--- Percentual ----\n"
+        + "menores: " + percentualMenorQue + "\n" + "adultas: " + percentualEntre + "\n"
+        + "maiores que 50: " + percentualMaiorQue + "\n" + "\nTOTAL: " + idadesSizeTotal;
+
+    System.out.println(relatorioFinal);
+  }
+}

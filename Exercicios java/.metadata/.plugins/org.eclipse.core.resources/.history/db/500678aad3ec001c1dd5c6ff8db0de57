@@ -1,0 +1,17 @@
+package com.trybe.acc.java.programamilhas.rest;
+
+import javax.ws.rs.core.MediaType;
+
+@Path("/conta")
+@ApplicationScoped
+public class ContaResource {
+  
+  
+  
+  @GET
+  @Path("/saldo")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getSaldo(@QueryParam("token") String token) {
+    return token;
+  }
+}

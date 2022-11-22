@@ -1,0 +1,107 @@
+package com.trybe.acc.java.minhasseries.service;
+
+import com.trybe.acc.java.minhasseries.exceptions.ExistenteException;
+import com.trybe.acc.java.minhasseries.exceptions.SerieNaoEncontradaException;
+import com.trybe.acc.java.minhasseries.model.Episodio;
+import com.trybe.acc.java.minhasseries.model.Serie;
+import com.trybe.acc.java.minhasseries.repository.EpisodioRepository;
+import com.trybe.acc.java.minhasseries.repository.SerieRepository;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SerieService {
+  @Autowired
+  private SerieRepository serieRepository;
+
+  @Autowired
+  private EpisodioRepository episodioRepository;
+
+  /**
+   * Method Create.
+   * 
+   * @param serie Serie.
+   * @return
+   */
+  public Serie create(Serie serie) {
+    if (serieRepository.existsByNome(serie.getNome())) {
+      throw new ExistenteException();
+    }
+    return serieRepository.save(serie);
+  }
+
+  /**
+   * Method listarSeries.
+   * 
+   * @return
+   */
+  public List<Serie> listaSeries() {
+    return serieRepository.findAll();
+  }
+
+  /**
+   * Method removes.
+   * 
+   * @param id Integer.
+   */
+  public void removes(Integer id) {
+    Optional<Serie> serieFound = serieRepository.findById(id);
+    if (serieFound.isEmpty()) {
+      throw new SerieNaoEncontradaException();
+    }
+    serieRepository.delete(serieFound.get());
+  }
+
+  /**
+   * Method createEpisodio.
+   * 
+   * @param id Integer.
+   * @param episodio Espisodio.
+   * @return
+   */
+  public Serie createEpisodio(Integer id, Episodio episodio) {
+    Optional<Serie> serieFound = serieRepository.findById(id);
+    if (serieFound.isEmpty()) {
+      throw new SerieNaoEncontradaException();
+    }
+    Serie serieToAdd = serieFound.get();
+    episodio.setSerie(serieToAdd);
+    serieToAdd.adicionarEpisodio(episodio);
+    episodioRepository.save(episodio);
+    serieRepository.save(serieToAdd);
+    return serieToAdd;
+  }
+
+  /**
+   * Method listar.
+   * 
+   * @param id Integer
+   * @return
+   */
+  public List<Episodio> listar(Integer id) {
+    Optional<Serie> serieFound = serieRepository.findById(id);
+    if (serieFound.isEmpty()) {
+      throw new SerieNaoEncontradaException();
+    }
+    return serieFound.get().getEpisodios();
+  }
+
+  /**
+   * Method setTime.
+   * 
+   * @return
+   */
+  public Map<String, Integer> setTime() {
+    Map<String, Integer> minutos = new HashMap<>();
+    Integer tempo = episodioRepository.sumTempoTotal();
+    if (tempo == null) {
+      tempo = 0;
+    }
+    minutos.put("tempoEmMinutos", tempo);
+    return minutos;
+  }
+}

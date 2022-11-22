@@ -1,0 +1,13 @@
+package app.trybe.specialityapp.commons;
+
+public class BadRequestCreateError extends RuntimeException {
+
+  /**
+   * badrequest.
+   */
+  private static final long serialVersionUID = 1L;
+
+  public BadRequestCreateError() {
+    super("Não é permitido inserir novos registros com ID explícito");
+  }
+}

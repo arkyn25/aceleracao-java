@@ -1,0 +1,12 @@
+package app.trybe.specialityapp.commons;
+
+public class RegistryNotFoundError extends RuntimeException {
+
+  /**
+   * notfound.
+   */
+
+  public RegistryNotFoundError() {
+    super("Nenhum registro foi encontrado!");
+  }
+}

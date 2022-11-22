@@ -1,0 +1,39 @@
+package com.trybe.acc.java.sistemadevotacao;
+
+import java.util.Scanner;
+
+public class Principal {
+
+  public static void main(String[] args) {
+    Scanner scan = new Scanner(System.in);
+    
+    GerenciamentoVotacao = gv = new GerenciamentoVotacao();
+    
+    String nome;
+    String cpf;
+    short numero;
+    boolean estaRegistrado = true;
+    short menu = 1;
+
+    do {
+      menuCandidatos();
+      menu = scan.nextShort();
+      
+      if (menu == 1) {
+        System.out.println("Entre com nome da pessoa candidata:");
+        nome  = scan.next();
+        
+        System.out.println("Entre com número da pessoa candidata:");
+        numero = scan.nextShort();
+        
+        gv.cadastrarPessoaCandidata(nome, numero);
+      } else if (menu == 2) {
+        estaRegistrado = false;
+      } else {
+        System.out.println("Insira uma opção válida");
+      }
+    } while (estaRegistrado && menu == 1);
+    
+    
+
+}

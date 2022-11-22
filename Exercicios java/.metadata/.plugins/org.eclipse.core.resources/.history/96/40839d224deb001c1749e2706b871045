@@ -1,0 +1,66 @@
+package app.trybe.specialityapp.service;
+
+import app.trybe.specialityapp.commons.BadRequestCreateError;
+import app.trybe.specialityapp.commons.DeleteNotFoundError;
+import app.trybe.specialityapp.commons.EditNotFoundError;
+import app.trybe.specialityapp.commons.RegistryNotFoundError;
+import app.trybe.specialityapp.model.Professional;
+import app.trybe.specialityapp.repository.ProfessionalRepository;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class Professional {
+  @Autowired
+  ProfessionalRepository repository;
+  
+  /**
+   * method get.
+   */
+  
+  public List<Professional> getAllProf() {
+    List<Professional> registros = repository.findAll();
+    
+    if (registros.isEmpty()) {
+      throw new RegistryNotFoundError();
+    }
+    
+    return registros;
+  }
+  
+  public void createNew(Professional p) {
+    if (p.getId() != null) {
+      throw new BadRequestCreateError();
+    } else {
+      repository.save(p);
+    }
+  }
+
+  /**
+   * method put.
+   */
+  public void updateById(Integer id, Professional p) {
+    Optional<Professional> verificado = repository.findById(id);
+    if (repository.findById(id).isEmpty()) {
+      throw new EditNotFoundError();
+    } else {
+      verificado.get().setName(p.getName());
+      verificado.get().setSpeciality(p.getSpeciality());
+      repository.save(verificado.get());
+    }
+  }
+
+  /**
+   * method delete.
+   */
+  public void deleteById(Integer id) {
+    if (repository.findById(id).isEmpty()) {
+      throw new DeleteNotFoundError();
+    } else {
+      repository.deleteById(id);
+    }
+
+  }
+}

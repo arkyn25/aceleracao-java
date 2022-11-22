@@ -1,0 +1,85 @@
+package com.trybe.acc.java.sistemadevotacao;
+
+import java.util.Scanner;
+
+public class Principal {
+
+  public static void main(String[] args) {
+    Scanner scan = new Scanner(System.in);
+    
+    GerenciamentoVotacao gv = new GerenciamentoVotacao();
+    
+    String nome;
+    String cpf;
+    short numero;
+    boolean estaRegistrado = true;
+    short menu = 1;
+
+    do {
+      menuCandidatos();
+      menu = scan.nextShort();
+      
+      if (menu == 1) {
+        System.out.println("Entre com nome da pessoa candidata:");
+        nome  = scan.next();
+        
+        System.out.println("Entre com número da pessoa candidata:");
+        numero = scan.nextShort();
+        
+        gv.cadastrarPessoaCandidata(nome, numero);
+      } else if (menu == 2) {
+        estaRegistrado = false;
+      } else {
+        System.out.println("Insira uma opção válida.");
+      }
+    } while (estaRegistrado && menu == 1);
+     
+    estaRegistrado = true;
+    menu = 1;
+    
+    do {
+      menuEleitores();
+      menu = scan.nextShort();
+      
+      if (menu == 1) {
+        System.out.println("Entre com nome da pessoa eleitora:");
+        nome = scan.next();
+        
+        System.out.println("Entre com cpf da pessoa eleitora:");
+        cpf = scan.next();
+        
+        gv.cadastrarPessoaEleitora(nome, cpf);
+      } else if (menu == 2) {
+        estaRegistrado = false;
+        
+      } else {
+        System.out.println("Insira uma opção válida.");
+      }
+      
+    } while (estaRegistrado && menu == 1);
+    
+    estaRegistrado = true;
+    menu = 1;
+    
+    do {
+      menuVotos();
+      menu = scan.nextShort();
+      
+      if (menu == 1) {
+        System.out.println("Entre com o cpf da pessoa eleitora:");
+        cpf = scan.next();
+        
+        System.out.println("Entre com o número da pessoa candidata:");
+        numero = scan.nextShort();
+        
+        gv.votar(cpf, numero);
+      } else if (menu == 2) {
+        gv.mostrarResultado();
+      } else if (menu == 3) {
+        gv.mostrarResultado();
+        estaRegistrado = false;
+      }
+    } while ( estaRegistrado && (menu == 1 || menu == 2));
+
+    scan.close();
+}

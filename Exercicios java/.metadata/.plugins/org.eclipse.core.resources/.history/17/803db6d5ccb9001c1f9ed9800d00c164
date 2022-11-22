@@ -1,0 +1,20 @@
+package com.trybe.acc.java.sistemadevotacao;
+import java.util.ArrayList;
+
+public class GerenciamentoVotacao {
+  private ArrayList<PessoaCandidata> pessoasCandidatas = new ArrayList<PessoaCandidata>();
+  private ArrayList<PessoaEleitora> pessoasEleitoras = new ArrayList<PessoaEleitora>();
+  private ArrayList<String> cpfComputado = new ArrayList<String>();
+  private int totalVotos = 0;
+  
+  public void cadastrarPessoaCandidata(String nome, int numero) {
+    boolean numeroNaoExist = true;
+    
+    for (PessoaCandidata candidato : pessoasCandidatas) {
+      if (candidato.getNumero() == numero) {
+        System.out.println("Número pessoa candidata já utilizado!");
+        numeroNaoExiste = false;
+      }
+    }
+  }
+}

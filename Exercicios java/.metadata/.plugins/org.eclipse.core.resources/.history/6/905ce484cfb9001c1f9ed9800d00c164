@@ -1,0 +1,107 @@
+package com.trybe.acc.java.sistemadevotacao;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
+public class GerenciamentoVotacao {
+  private ArrayList<PessoaCandidata> pessoasCandidatas = new ArrayList<PessoaCandidata>();
+  private ArrayList<PessoaEleitora> pessoasEleitoras = new ArrayList<PessoaEleitora>();
+  private ArrayList<String> cpfComputado = new ArrayList<String>();
+  private int totalDeVotos = 0;
+
+
+  /**
+   * Metodo utilizado para cadastrar candidatos.
+   * 
+   * @param nome - recebe nome do candidato
+   * @param numero - recebe numero do candidato
+   */
+  public void cadastrarPessoaCandidata(String nome, int numero) {
+    boolean numeroNaoExiste = true;
+
+    for (PessoaCandidata candidato : pessoasCandidatas) {
+      if (candidato.getNumero() == numero) {
+        System.out.println("Número pessoa candidata já utilizado!");
+        numeroNaoExiste = false;
+      }
+    }
+
+    if (numeroNaoExiste) {
+      PessoaCandidata pessoaCandidata = new PessoaCandidata(nome, numero);
+      pessoasCandidatas.add(pessoaCandidata);
+    }
+  }
+
+  /**
+   * Metodo para cadastrar eleitores.
+   *
+   * @param nome - recebe nome da pessoa eleitora
+   * @param cpf - recebe o numero do cpf do eleitor
+   */
+
+  public void cadastrarPessoaEleitora(String nome, String cpf) {
+    boolean cpfNaoExiste = true;
+
+    for (PessoaEleitora eleitor : pessoasEleitoras) {
+      if (eleitor.getCpf().compareTo(cpf) == 0) {
+        System.out.println("Pessoa eleitora já cadastrada!");
+        cpfNaoExiste = false;
+      }
+    }
+
+    if (cpfNaoExiste) {
+      PessoaEleitora pessoaEleitora = new PessoaEleitora(nome, cpf);
+      pessoasEleitoras.add(pessoaEleitora);
+    }
+  }
+
+  /**
+   * Metodo para gerenciar votacao.
+   * @param cpfPessoaEleitora - recebe cpf do eleitor
+   * @param numeroPessoaCandidata - recebe o numero do candidato
+   */
+
+  public void votar(String cpfPessoaEleitora, int numeroPessoaCandidata) {
+    boolean cpfNaoRegistrado = true;
+
+    for (int i = 0; i < cpfComputado.size(); i += 1) {
+      if (cpfComputado.get(i).compareTo(cpfPessoaEleitora) == 0) {
+        System.out.println("Pessoa eleitora já votou!");
+        cpfNaoRegistrado = false;
+      }
+    }
+
+    if (cpfNaoRegistrado) {
+      for (PessoaCandidata candidato : pessoasCandidatas) {
+        if (candidato.getNumero() == numeroPessoaCandidata) {
+          candidato.recebeVotos();
+        }
+      }
+
+      cpfComputado.add(cpfPessoaEleitora);
+      totalDeVotos += 1;
+    }
+  }
+
+  /**
+   * Metodo para imprimir relatorio da votacao.
+   */
+  public void mostrarResultado() {
+    float votos;
+
+    DecimalFormat df = new DecimalFormat("#0.0#%");
+
+    if (totalDeVotos == 0) {
+      System.out.println("É preciso ter pelo menos um voto para mostrar o resultado.");
+    } else {
+      for (PessoaCandidata candidato : pessoasCandidatas) {
+        votos = candidato.getVotos();
+
+        System.out.println("Nome: " + candidato.getNome() + " --- " + candidato.getVotos() + " { "
+            + df.format(votos / (float) totalDeVotos) + " } ");
+      }
+      System.out.println("Total de votos: " + totalDeVotos);
+
+    }
+  }
+}

@@ -1,0 +1,5 @@
+package com.trybe.acc.java.programamilhas.rest;
+
+public class EchoResource {
+
+}

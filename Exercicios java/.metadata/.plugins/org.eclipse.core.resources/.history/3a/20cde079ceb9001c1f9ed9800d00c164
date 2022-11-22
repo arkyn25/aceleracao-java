@@ -1,0 +1,56 @@
+package com.trybe.acc.java.sistemadevotacao;
+
+import java.util.ArrayList;
+
+public class GerenciamentoVotacao {
+  private ArrayList<PessoaCandidata> pessoasCandidatas = new ArrayList<PessoaCandidata>();
+  private ArrayList<PessoaEleitora> pessoasEleitoras = new ArrayList<PessoaEleitora>();
+  private ArrayList<String> cpfComputado = new ArrayList<String>();
+  private int totalDeVotos = 0;
+
+
+  /**
+   * Metodo utilizado para cadastrar candidatos.
+   * 
+   * @param nome - recebe nome do candidato
+   * @param numero - recebe numero do candidato
+   */
+  public void cadastrarPessoaCandidata(String nome, int numero) {
+    boolean numeroNaoExiste = true;
+
+    for (PessoaCandidata candidato : pessoasCandidatas) {
+      if (candidato.getNumero() == numero) {
+        System.out.println("Número pessoa candidata já utilizado!");
+        numeroNaoExiste = false;
+      }
+    }
+
+    if (numeroNaoExiste) {
+      PessoaCandidata pessoaCandidata = new PessoaCandidata(nome, numero);
+      pessoasCandidatas.add(pessoaCandidata);
+    }
+  }
+
+  /**
+   * Metodo para cadastrar eleitores.
+   *
+   * @param nome - recebe nome da pessoa eleitora
+   * @param cpf - recebe o numero do cpf do eleitor
+   */
+
+  public void cadastrarPessoaEleitora(String nome, String cpf) {
+    boolean cpfNaoExiste = true;
+
+    for (PessoaEleitora eleitor : pessoasEleitoras) {
+      if (eleitor.getCpf().compareTo(cpf) == 0) {
+        System.out.println("Pessoa eleitora já cadastrada!");
+        cpfNaoExiste = false;
+      }
+    }
+
+    if (cpfNaoExiste) {
+      PessoaEleitora pessoaEleitora = new PessoaEleitora(nome, cpf);
+      pessoasEleitoras.add(pessoaEleitora);
+    }
+  }
+}

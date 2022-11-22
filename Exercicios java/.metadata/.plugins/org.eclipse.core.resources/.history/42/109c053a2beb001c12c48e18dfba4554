@@ -1,0 +1,38 @@
+package com.betrybe.service;
+
+import com.betrybe.model.Carro;
+import com.betrybe.repository.CarroRepository;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import java.util.List;
+
+@ApplicationScoped
+public class CarroService {
+
+    @Inject
+    private CarroRepository repository;
+
+    public List<Carro> listar(){
+        return repository.listAll();
+    }
+
+    public Carro buscarPorId(Long id){
+        return repository.findById(id);
+    }
+
+    @Transactional
+    public void salvar(Carro carro){
+        repository.persist(carro);
+    }
+
+    @Transactional
+    public void atualizar(Carro carro){
+        repository.persist(carro);
+    }
+    @Transactional
+    public void deletar(Long id){
+        repository.deleteById(id);
+    }
+}

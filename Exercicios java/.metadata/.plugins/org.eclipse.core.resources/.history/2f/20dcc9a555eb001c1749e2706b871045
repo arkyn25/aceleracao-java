@@ -1,0 +1,100 @@
+package app.trybe.specialityapp.controller;
+
+import app.trybe.specialityapp.commons.ApplicationError;
+import app.trybe.specialityapp.commons.BadRequestCreateError;
+import app.trybe.specialityapp.commons.DeleteNotFoundError;
+import app.trybe.specialityapp.commons.EditNotFoundError;
+import app.trybe.specialityapp.commons.RegistryNotFoundError;
+import app.trybe.specialityapp.model.Professional;
+import app.trybe.specialityapp.service.ProfessionalService;
+import java.util.List;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
+
+@ResController
+@Path("/professional")
+public class ProfessionalController {
+  
+  @Autowired
+  ProfessionalService service;
+  
+  /**
+   * method get.
+   */
+  @GET
+  @Path("/all")
+  @Produces("application/json")
+  public Response findAll() {
+    try {
+      List<Professional> registro = service.getAll();
+
+      return Response.status(200).entity(registro).build();
+    } catch (RegistryNotFoundError error) {
+      return Response.status(Response.Status.NOT_FOUND)
+          .entity(new ApplicationError(error.getMessage(), Response.Status.NOT_FOUND)).build();
+    }
+
+  }
+  
+  /**
+   * method post.
+   */
+  @POST
+  @Path("/add")
+  @Consumes("application/json")
+  @Produces("application/json")
+  public Response insert(Professional p) {
+    try {
+      service.create(p);
+      return Response.status(201).entity("Inserido").build();
+    } catch (BadRequestCreateError error) {
+      return Response.status(Response.Status.BAD_REQUEST)
+          .entity(new ApplicationError(error.getMessage(), Response.Status.BAD_REQUEST)).build();
+    }
+  }
+  
+  /**
+   * method put.
+   */
+  @PUT
+  @Path("/edit/{id}")
+  @Consumes("application/json")
+  @Produces("application/json")
+  public Response edit(@PathParam("id") Integer id, Professional p) {
+    try {
+      service.updateById(id, p);
+
+      return Response.status(200).entity(String.format("ID [%d] atualizado", id)).build();
+    } catch (EditNotFoundError error) {
+      return Response.status(Response.Status.NOT_FOUND)
+          .entity(new ApplicationError(error.getMessage(), Response.Status.NOT_FOUND)).build();
+    }
+  }
+  
+  /**
+   * method delete.
+   */
+  @DELETE
+  @Path("/delete/{id}")
+  @Produces("application/json")
+  public Response delete(@PathParam("id") Integer id) {
+    try {
+      service.deleteById(id);
+
+      return Response.status(200).entity(String.format("ID [%d] removido", id)).build();
+    } catch (DeleteNotFoundError error) {
+      return Response.status(Response.Status.NOT_FOUND)
+          .entity(new ApplicationError(error.getMessage(), Response.Status.NOT_FOUND)).build();
+    }
+
+  }
+}

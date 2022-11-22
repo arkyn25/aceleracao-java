@@ -1,0 +1,13 @@
+package app.trybe.specialityapp.commons;
+
+public class RegistryNotFoundError extends RuntimeException {
+
+  /**
+   * registry notfound.
+   */
+  private static final long serialVersionUID = -1L;
+
+  public RegistryNotFoundError() {
+    super("Nenhum registro foi encontrado!");
+  }
+}
